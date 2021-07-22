@@ -1,0 +1,7 @@
+spring:
+  data:
+    mongodb:
+      uri: "mongodb://${TEST_USERNAME}:${TEST_PASSWORD}@${TECENT_HOST}:27017/test-spring-boot-database"
+logging:
+  level:
+    org.mongodb: TRACE
