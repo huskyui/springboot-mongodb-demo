@@ -43,7 +43,31 @@ class MongodbDemoApplicationTests {
 
     @Test
     public void testInsertComplexData(){
-        pageList();
+        Query query = new Query()
+                .addCriteria(where("_id").is(1));
+        List<Comment> commentList = mongoTemplate.find(query, Comment.class, "comment_collection");
+        if (!CollectionUtils.isEmpty(commentList)){
+            Comment comment = commentList.get(0);
+            List<Comment> subCommentList = comment.getSubComment();
+            if (CollectionUtils.isEmpty(subCommentList)){
+                subCommentList = new ArrayList<>();
+            }
+
+            Comment subComment = new Comment();
+            subComment.setId(5);
+            subComment.setComment("给第一条挽尊");
+            subComment.setSubComment(null);
+            subComment.setLevel(1);
+            subComment.setUser("adios");
+            subComment.setCreateTime(new Date());
+            subCommentList.add(subComment);
+            Update update = new Update();
+            update.set("subCommentList",subCommentList);
+            UpdateResult updateResult = mongoTemplate.updateFirst(query, update, "comment_collection");
+            System.out.println(updateResult);
+
+
+        }
 
     }
 
